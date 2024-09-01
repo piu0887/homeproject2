@@ -129,6 +129,8 @@ def signup():
         description: 비밀번호가 일치하지 않음
       409:
         description: Sign_ID 또는 Email 중복
+      500:
+        description: 서버 내부 오류. 사용자 등록 중 문제가 발생함
     """
     if request.method == 'POST':
         sign_id = request.form['sign_id']
@@ -142,7 +144,7 @@ def signup():
         
         # 비밀번호 일치 여부 확인
         if password != confirm_password:
-            return 'Passwords do not match! Please try again.'
+            return 'Passwords do not match! Please try again.', 400
         
         hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
         
@@ -156,10 +158,10 @@ def signup():
         except sqlite3.IntegrityError as e:
             conn.close()
             if 'UNIQUE constraint failed: users.Sign_ID' in str(e):
-                return 'User ID already exists!'
+                return 'User ID already exists!', 409
             if 'UNIQUE constraint failed: users.Email' in str(e):
-                return 'Email already exists!'
-            return 'An error occurred while signing up. Please try again.'
+                return 'Email already exists!', 409
+            return 'An error occurred while signing up. Please try again.', 500
         conn.close()
         
         return redirect(url_for('login'))
