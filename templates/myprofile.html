@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h2 class="my-4 text-center">My Profile</h2>
+        <ul class="list-group">
+            <li class="list-group-item"><strong>Sign ID:</strong> {{ user['Sign_ID'] }}</li>
+            <li class="list-group-item"><strong>Name:</strong> {{ user['Name'] }}</li>
+            <li class="list-group-item"><strong>Email:</strong> {{ user['Email'] }}</li>
+            <li class="list-group-item"><strong>Phone:</strong> {{ user['Phone'] }}</li>
+            <li class="list-group-item"><strong>Address:</strong> {{ user['Address'] }}</li>
+            <li class="list-group-item"><strong>Type:</strong> {{ user['Type'] }}</li>
+            <li class="list-group-item"><strong>Created At:</strong> {{ user['Created_At'] }}</li>
+            <li class="list-group-item"><strong>Updated At:</strong> {{ user['Updated_At'] }}</li>
+        </ul>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg mt-4">Back to Dashboard</a>
+    </div>
+</body>
+</html>

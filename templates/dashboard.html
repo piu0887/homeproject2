@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container text-center">
+        <h1 class="my-4">Hello, {{ user_name }}!</h1>
+        <p>Welcome to your dashboard.</p>
+        <a href="{{ url_for('myprofile') }}" class="btn btn-info btn-lg mx-2">My Profile</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger btn-lg mx-2">Logout</a>
+    </div>
+</body>
+</html>
