@@ -11,6 +11,31 @@ app.secret_key = 'ghkdtkdvlf'  # JWT 발행 시 사용할 비밀 키
 
 swagger = Swagger(app)
 
+def init_db():
+    """
+    데이터베이스와 테이블을 초기화합니다.
+    """
+    conn = get_db_connection()
+    c = conn.cursor()
+
+    # users 테이블 생성
+    c.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            User_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+            Sign_ID TEXT NOT NULL UNIQUE,
+            Name TEXT NOT NULL,
+            Email TEXT NOT NULL UNIQUE,
+            Phone TEXT,
+            Address TEXT,
+            Type TEXT,
+            Password TEXT NOT NULL,
+            Created_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            Updated_At TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+
+    conn.commit()
+    conn.close()
 
 # 데이터베이스 연결 함수
 def get_db_connection():
@@ -81,57 +106,60 @@ def signup():
     """
     사용자 등록을 처리합니다.
     ---
-    parameters:
-      - name: sign_id
-        in: formData
-        type: string
-        required: true
-        description: User's unique ID
-      - name: name
-        in: formData
-        type: string
-        required: true
-        description: User's name
-      - name: email
-        in: formData
-        type: string
-        required: true
-        description: User's email
-      - name: phone
-        in: formData
-        type: string
-        required: false
-        description: User's phone number
-      - name: address
-        in: formData
-        type: string
-        required: false
-        description: User's address
-      - name: type
-        in: formData
-        type: string
-        required: false
-        description: User's type (personal or company)
-      - name: password
-        in: formData
-        type: string
-        required: true
-        description: User's password
-      - name: confirm_password
-        in: formData
-        type: string
-        required: true
-        description: Confirmation of user's password
-    responses:
-      200:
-        description: 사용자 등록 성공
-      400:
-        description: 비밀번호가 일치하지 않음
-      409:
-        description: Sign_ID 또는 Email 중복
-      500:
-        description: 서버 내부 오류. 사용자 등록 중 문제가 발생함
+    # POST 요청에 대해서만 Swagger 문서를 생성하도록 설정
+    post:
+      parameters:
+        - name: sign_id
+          in: formData
+          type: string
+          required: true
+          description: User's unique ID
+        - name: name
+          in: formData
+          type: string
+          required: true
+          description: User's name
+        - name: email
+          in: formData
+          type: string
+          required: true
+          description: User's email
+        - name: phone
+          in: formData
+          type: string
+          required: false
+          description: User's phone number
+        - name: address
+          in: formData
+          type: string
+          required: false
+          description: User's address
+        - name: type
+          in: formData
+          type: string
+          required: false
+          description: User's type (personal or company)
+        - name: password
+          in: formData
+          type: string
+          required: true
+          description: User's password
+        - name: confirm_password
+          in: formData
+          type: string
+          required: true
+          description: Confirmation of user's password
+      responses:
+        200:
+          description: 사용자 등록 성공
+        400:
+          description: 비밀번호가 일치하지 않음
+        409:
+          description: Sign_ID 또는 Email 중복
+        500:
+          description: 서버 내부 오류. 사용자 등록 중 문제가 발생함
     """
+
     if request.method == 'POST':
         sign_id = request.form['sign_id']
         name = request.form['name']
@@ -262,5 +290,7 @@ def logout():
     response.delete_cookie('token')  # 쿠키에서 토큰 삭제
     return response
 
+
 if __name__ == '__main__':
+    init_db()  
     app.run(debug=True)
